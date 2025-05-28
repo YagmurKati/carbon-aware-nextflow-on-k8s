@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nextflow-run-${UNIQUE_ID}
+spec:
+  template:
+    metadata:
+      labels:
+        job-name: nextflow-run-${UNIQUE_ID}
+    spec:
+      containers:
+        - name: nextflow
+          image: nextflow/nextflow:25.04.2 
+          command: ["sh", "-c"]
+          args:
+            - |
+              echo "[INFO] Running Nextflow pipeline..."
+              cd /workspace
+              nextflow run green_k8s_workflow.nf \
+              -c nextflow.config \
+              -with-trace trace.txt \
+              -with-report report.html \
+              -with-timeline timeline.html \
+              -resume
+
+          volumeMounts:
+            - name: workspace
+              mountPath: /workspace
+      volumes:
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: nextflow-pvc
+      restartPolicy: Never
+      serviceAccountName: default
+

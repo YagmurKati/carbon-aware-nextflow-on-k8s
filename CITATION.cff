@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this carbon-aware Nextflow-Kubernetes workflow in your work, please cite it as below."
+title: "Carbon-Aware Nextflow Pipeline on Kubernetes"
+authors:
+  - family-names: Kati
+    given-names: Yagmur
+    affiliation: Humboldt University of Berlin
+date-released: 2025-05-28
+version: 1.0.0
+license: MIT
+repository-code: https://github.com/YagmurKati/carbon-aware-nextflow-on-k8s
+
+keywords:
+  - nextflow
+  - kubernetes
+  - carbon-aware
+  - sustainable-computing
+  - workflow
+  - electricitymap
+
