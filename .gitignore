@@ -1,0 +1,14 @@
+# Nextflow work directory and state
+work/
+.nextflow*
+*.log
+
+# Output artifacts
+trace.txt
+report.html
+timeline.html
+processed.config
+
+# System and editor clutter
+.DS_Store
+*.swp
