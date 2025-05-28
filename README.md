@@ -14,16 +14,20 @@ This project runs a carbon-aware Nextflow pipeline on any Kubernetes cluster usi
 
 ---
 
+
+
 ## 📑 Table of Contents
 1. [Prerequisites](#-prerequisites)
 2. [Quick-Start (any cluster)](#-quick-start-any-cluster)
-3. [Optional: FONDA (HU Berlin) Setup](#-optional-fonda-cluster-setup)
-4. [Carbon-Aware Logic](#-carbon-aware-logic)
+3. [Optional: FONDA Cluster Setup (HU Berlin)](#optional-fonda-cluster-setup-hu-berlin)
+4. [Carbon-Aware Logic](#carbon-aware-logic-inside-green_k8s_workflownf)
 5. [Debugging & Monitoring](#-debugging--monitoring)
 6. [Repository Layout](#-repository-layout)
 7. [Output Artifacts](#-output-artifacts)
 8. [Clean-Up](#-clean-up)
-9. [Customising the Workflow](#-customising-the-workflow)
+9. [Customising the Workflow](#customising-the-workflow)
+10. [Why Carbon-Aware Scheduling on Kubernetes?](#-why-carbon-aware-scheduling-on-kubernetes)
+11. [References](#-references)
 
 ---
 
@@ -68,7 +72,7 @@ kubectl get jobs -n $NAMESPACE
 kubectl get pods -n $NAMESPACE
 kubectl logs -f job/nextflow-run-$UNIQUE_ID -n $NAMESPACE
 ```
-## 🏛️  Optional: FONDA Cluster Setup (HU Berlin)
+## Optional: FONDA Cluster Setup (HU Berlin)
 ```bash
 # VPN & kubectl context
 sudo wg-quick up $(pwd)/wg0.conf     # connects to FONDA VPN
@@ -79,7 +83,7 @@ kubectl get nodes -L usedby          # confirm access
 ```
 Then continue with the Quick-Start section above.
 
-##  Carbon-Aware Logic (inside green_k8s_workflow.nf)
+## Carbon-Aware Logic (inside green_k8s_workflow.nf)
 
 ```bash
 # Query live CO₂ intensity (default zone = DE)
@@ -180,7 +184,7 @@ kubectl cp $NAMESPACE/pvc-uploader:/workspace/trace.txt     ./trace.txt
 chmod +x reset.sh && ./reset.sh
 # Deletes: all Jobs/Pods, uploader pod, ConfigMaps, and PVC content
 ```
-## 🛠️  Customising the Workflow
+## Customising the Workflow
 
 - Make every task carbon-aware: replicate the retry/sleep logic from **`highenergy_std_task`** in other process definitions.
 - Adjust simulated runtimes: in `green_k8s_workflow.nf` change sleep 10, sleep 3600, etc. to match real job durations.
