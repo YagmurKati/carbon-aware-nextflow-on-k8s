@@ -187,3 +187,40 @@ chmod +x reset.sh && ./reset.sh
 - Tune resource requests: edit labels and nextflow.config to schedule GPU, high-RAM, or node-affinity workloads.
 - Happy (low-carbon) computing! 🌍
 
+## 🌍 Why Carbon-Aware Scheduling on Kubernetes?
+
+Electricity’s carbon intensity can swing **5- to 10-fold within a day** as fossil plants ramp up and renewables ebb. By letting Kubernetes decide **when** to launch batch jobs—rather than running them immediately—we can ride those clean-power waves and cut emissions dramatically.
+
+| Key takeaway | Supporting evidence |
+|--------------|---------------------|
+| **Real-time CO₂ signals are accurate and actionable.** ElectricityMap provides 5-minute carbon intensity data already used for operational decisions. | Tranberg _et al._ [9], Gorka _et al._ [8] |
+| **Delaying non-urgent jobs typically cuts emissions by 30–60 %.** | Piontek _et al._ [1]; Beena _et al._ [3] |
+| **Carbon checks can be built into workflows, not just schedulers.** | West _et al._ [5], Lechowicz _et al._ [6], James & Schien [2] |
+
+### 🔧 What This Repo Adds
+
+* **Code-integrated carbon gating** – `green_k8s_workflow.nf` *delays* `highenergy_std_task` until live CO₂ ≤ THRESHOLD, then lets the task run to completion without further checks.  
+* **Cluster-agnostic design** – no custom controllers, CRDs, or admission webhooks; plain Jobs + PVCs work anywhere.  
+* **Minimal footprint** – a 4-line `curl` → `jq` → `sleep` loop; no extra containers or binaries.
+
+🧩 This approach introduces **workflow-level adaptation**, not merely a scheduling adjustment — giving users full control over **which tasks defer** and **under what conditions**.
+
+## 📚 References
+
+### Carbon-aware scheduling & orchestration
+[1] T. Piontek *et al.* “Carbon Emission-Aware Job Scheduling for Kubernetes Deployments.” *J. Supercomput.*, 2024. <https://doi.org/10.1007/s11227-023-05506-7>  
+[2] A. James and D. Schien. “A Low-Carbon Kubernetes Scheduler.” *ICT4S*, 2019. <https://ceur-ws.org/Vol-2382/ICT4S2019_paper_28.pdf>  
+[3] B. M. Beena *et al.* “A Green Cloud-Based Framework for Energy-Efficient Task Scheduling Using Carbon-Intensity Data …” *IEEE Access*, 13, 2025. <https://doi.org/10.1109/ACCESS.2025.3562882>  
+[4] W. A. Hanafy *et al.* “Going Green for Less Green: Optimizing the Cost of Reducing Cloud Carbon Emissions.” *ASPLOS ’24*, 2024. <https://doi.org/10.1145/3620666.3651374>  
+
+### Workflow-level & scientific computing
+[5] K. West *et al.* “Exploring the Potential of Carbon-Aware Execution for Scientific Workflows.” arXiv:2503.13705, 2025. <https://arxiv.org/abs/2503.13705>  
+[6] A. Lechowicz *et al.* “Carbon- and Precedence-Aware Scheduling for Data-Processing Clusters.” arXiv:2502.09717, 2025. <https://arxiv.org/abs/2502.09717>  
+
+### HPC & data-center decarbonization surveys
+[7] C. A. Silva *et al.* “A Review on the Decarbonization of High-Performance Computing Centers.” *Renew. Sustain. Energy Rev.* 189 (2024): 114019. <https://doi.org/10.1016/j.rser.2023.114019>  
+
+### Carbon-intensity data & accounting methods
+[8] J. Gorka *et al.* “ElectricityEmissions.jl: A Framework for the Comparison of Carbon-Intensity Signals.” arXiv:2411.06560, 2024. <https://arxiv.org/abs/2411.06560>  
+[9] B. Tranberg *et al.* “Real-Time Carbon Accounting Method for the European Electricity Markets.” *Energy Strategy Rev.* 26 (2019): 100367. <https://doi.org/10.1016/j.esr.2019.100367>  
+
